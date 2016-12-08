@@ -8,20 +8,47 @@ import java.util.ArrayList;
 public class MainServer {
 	
 	public static void main(String [ ] args){
-		ArrayList<Game> games = null;
+		Game gameWithBot = null;
+		Game gameWithPlayer = null;
+		
 		ServerSocket server = null;
 		try {
 			server = new ServerSocket(3513);
-		} catch (IOException e) {
+		} catch(Exception e){
 			e.printStackTrace();
 		}
-		Socket socket = null;
-		try {
-			socket = server.accept();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while(true){
+			Socket socket = null;
+			try {
+				socket = server.accept();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Client client = new Client(socket);
+			
+			if(client.playWithBot()){
+				gameWithBot = new Game();
+				gameWithBot.addClient(client);
+				try {
+					gameWithBot.addClient(new Client(server.accept()));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				new Thread(gameWithBot).start();
+			} else {
+				if(gameWithPlayer == null){
+					gameWithPlayer = new Game();
+					gameWithPlayer.addClient(client);
+				} else {
+					gameWithPlayer.addClient(client);
+					new Thread(gameWithPlayer).start();
+					gameWithPlayer = null;
+				}
+			}
+			
 		}
-		games.get(0).addClient(new Client(socket));
 	}
 }
