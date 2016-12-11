@@ -1,13 +1,22 @@
 package client;
 
 import java.awt.Point;
+import java.util.Scanner;
+
+import main.Board;
 
 public class PlayerHumanTerminal implements Player {
+	
+	private int color;
+	private Scanner reader;
+	private String nickname = null;
+	private String opponentNickname;
+	Board board;
 
 	@Override
-	public void setColor(int color) {
-		// TODO Auto-generated method stub
-
+	public void setColor(int color){
+		this.color = color;
+		System.out.println("Setted color: " + this.color);
 	}
 
 	@Override
@@ -17,21 +26,26 @@ public class PlayerHumanTerminal implements Player {
 	}
 
 	@Override
-	public Point getMove() {
-		// TODO Auto-generated method stub
-		return null;
+	public Point getMove(){
+		System.out.println("dawaj x");
+		int x = reader.nextInt();
+		System.out.println("dawaj y");
+		int y = reader.nextInt();
+		return new Point(x, y);
 	}
 
 	@Override
-	public String getNickname() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getNickname(){
+		if(nickname == null){
+			System.out.println("Wyskakuj z pseudonimu");
+			nickname = reader.nextLine();
+		}
+		return nickname;
 	}
 
 	@Override
-	public void setOpponentNickname(String opponentNickname) {
-		// TODO Auto-generated method stub
-
+	public void setOpponentNickname(String opponentNickname){
+		this.opponentNickname = opponentNickname;
+		System.out.println("Your oponen is " + opponentNickname);
 	}
-
 }
