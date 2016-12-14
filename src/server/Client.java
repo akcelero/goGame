@@ -1,5 +1,6 @@
 package server;
 
+import java.awt.Point;
 import java.net.Socket;
 
 public class Client {
@@ -14,8 +15,8 @@ public class Client {
 		this.color = color;
 	}
 	
-	public boolean playWithBot() {
-		return false;
+	public boolean getDecisionAboutBot() {
+		return true;
 	}
 	
 	public String getNickname(){
@@ -24,5 +25,18 @@ public class Client {
 
 	public void setOpponentNickname(String opponentNickname) {
 		this.opponentNickname = opponentNickname;
+	}
+
+	public Point getMove() {
+		
+		return null;
+	}
+
+	public void returnResultCode(int resultCode) {
+		
+	}
+
+	public void sendOpponentMove(Point move) {
+		
 	}
 }

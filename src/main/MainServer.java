@@ -13,45 +13,42 @@ public class MainServer {
 	public static void main(String [ ] args){
 		Game gameWithBot = null;
 		Game gameWithPlayer = null;
-		
+
 		ServerSocket server = null;
 		try {
 			server = new ServerSocket(3513);
-		} catch(Exception e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		while(true){
-			Socket socket = null;
-			try {
-				socket = server.accept();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			Client client = new Client(socket);
-			
-			if(client.playWithBot()){
-				gameWithBot = new Game();
-				gameWithBot.addClient(client);
-				try {
-					gameWithBot.addClient(new Client(server.accept()));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				new Thread(gameWithBot).start();
-			} else {
-				if(gameWithPlayer == null){
-					gameWithPlayer = new Game();
-					gameWithPlayer.addClient(client);
+		try{
+			while(true){
+								
+				Socket socket = server.accept();
+				
+				Client player = new Client(socket);
+				boolean playWithPlayer = player.getDecisionAboutBot();
+				
+				if(player.getDecisionAboutBot()){
+					if(gameWithPlayer == null){
+						gameWithPlayer = new Game();
+						gameWithPlayer.addPlayer(player);
+					} else {
+						gameWithPlayer.addPlayer(player);
+						new Thread(gameWithPlayer).start();
+						gameWithPlayer = null;
+					}
+					
 				} else {
-					gameWithPlayer.addClient(client);
-					new Thread(gameWithPlayer).start();
-					gameWithPlayer = null;
+					gameWithBot = new Game();
+					
+					Client bot = new Client(server.accept());
+					
+					gameWithBot.addPlayer(player);
+					gameWithBot.addPlayer(bot);
+					
+					new Thread(gameWithBot).start();
 				}
 			}
-			
-		}
+		}catch(Exception e){}
 	}
 }
