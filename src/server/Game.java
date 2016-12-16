@@ -23,10 +23,8 @@ public class Game implements Runnable {
 	public void addPlayer(Client player) {
 		players.get(0).setColor(1);
 		players.get(1).setColor(0);
-		String client0 = players.get(0).getNickname();
-		String client1 = players.get(1).getNickname();
-		players.get(0).setOpponentNickname(client1);
-		players.get(1).setOpponentNickname(client0);
+		players.get(0).sendNicknameOfOponent(players.get(1).getNickname());
+		players.get(1).sendNicknameOfOponent(players.get(0).getNickname());
 		while(resultCode != 4200){
 			
 			do{
@@ -43,6 +41,16 @@ public class Game implements Runnable {
 			turn ^= 1;
 			players.get(turn).sendOpponentMove(move);
 		}
+		if(!players.get(0).isConnected() || players.get(1).getScore() > players.get(0).getScore()){
+			players.get(1).win();
+			players.get(0).lose();
+		} else {
+			players.get(0).win();
+			players.get(1).lose();
+		}
+		players.remove(1);
+		players.remove(0);
+		return;
 	}
 
 }
