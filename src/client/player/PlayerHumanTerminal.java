@@ -48,4 +48,16 @@ public class PlayerHumanTerminal implements Player {
 		this.opponentNickname = opponentNickname;
 		System.out.println("Your oponen is " + opponentNickname);
 	}
+
+	@Override
+	public void getReturnCode(int code) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getOpponentMove(int i, int j) {
+		// TODO Auto-generated method stub
+		
+	}
 }

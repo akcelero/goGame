@@ -29,6 +29,11 @@ public class MainServer {
 				boolean playWithPlayer = player.getDecisionAboutBot();
 				
 				if(player.getDecisionAboutBot()){
+					if(gameWithPlayer != null){
+						if(!gameWithPlayer.getUser(0).isConnected()){
+							gameWithPlayer = null;
+						}
+					}
 					if(gameWithPlayer == null){
 						gameWithPlayer = new Game();
 						gameWithPlayer.addPlayer(player);
@@ -49,6 +54,13 @@ public class MainServer {
 					new Thread(gameWithBot).start();
 				}
 			}
-		}catch(Exception e){}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		try {
+			server.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

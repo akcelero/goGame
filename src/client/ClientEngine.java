@@ -59,16 +59,23 @@ public class ClientEngine implements Runnable {
 						con.sendDecisionAboutBot(playWithBot);
 					break;
 					case "setColor":
+						client.setColor((int)data.get("color"));
 					break;
 					case "getTurn":
+						Point move = client.getMove();
+						con.sendMove(move.x, move.y);
 					break;
 					case "getNickname":
+						con.sendNickname(client.getNickname());
 					break;
 					case "returnCode":
+						client.getReturnCode((int)data.get("code"));
 					break;
 					case "opponentMove":
+						client.getOpponentMove( (int) data.get("x"), (int) data.get("y"));
 					break;
 					case "opponentNickname":
+						client.setOpponentNickname((String) data.get("nickname"));
 					break;
 					default:
 						System.out.println("Recived undefined package! " + (String)data.get("Type"));

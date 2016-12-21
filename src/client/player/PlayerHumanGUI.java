@@ -83,4 +83,16 @@ public class PlayerHumanGUI implements Player {
 
 	}
 
+	@Override
+	public void getReturnCode(int code) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getOpponentMove(int i, int j) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -8,5 +8,7 @@ public interface Player {
 	public Point getMove();
 	public String getNickname();
 	public void setOpponentNickname(String opponentNickname);
+	public void getReturnCode(int code);
+	public void getOpponentMove(int i, int j);
 
 }

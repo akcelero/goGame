@@ -1,6 +1,7 @@
 package server;
 
 import java.awt.Point;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import main.Board;
@@ -51,6 +52,9 @@ public class Game implements Runnable {
 		players.remove(1);
 		players.remove(0);
 		return;
+	}
+	public Client getUser(int i) {
+		return players.get(i);
 	}
 
 }

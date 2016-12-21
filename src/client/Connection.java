@@ -46,4 +46,14 @@ public class Connection {
 		}catch(Exception e){}
 	}
 
+	public void sendMove(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sendNickname(String nickname) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
