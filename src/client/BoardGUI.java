@@ -8,6 +8,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import main.Board;
@@ -27,6 +29,9 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 	private int fieldSizeY;
 	private Point mouseMovedPoint;
 	private Board board;
+	private int selectingPoints;
+	private boolean GUIlocked;
+	private int checkingOponentArea;
 
 	public BoardGUI(){
 		paddingX = 30;
@@ -75,7 +80,21 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 					paddingY + deltaY + 18 * height/18
 				);
 		}
-		if(mouseMovedPoint != null){
+		if(selectingPoints == 1 || checkingOponentArea == 1){
+			g.setColor(Color.DARK_GRAY);
+			for(Point p : selectedPoints){
+				int x = p.x;
+				int y = p.y;
+			
+				g.fillOval(
+						paddingY + deltaX + x * width/18 - (fieldSizeX * 4)/10,
+						paddingY + deltaY + y * height/18 - (fieldSizeY * 4)/10,
+						(fieldSizeX * 8)/10,
+						(fieldSizeY * 8)/10
+					);
+			}
+		}
+		if(GUIlocked == false && mouseMovedPoint != null){
 			g.setColor(Color.RED);
 			int x = (int)((mouseMovedPoint.getX() - deltaX - paddingX + fieldSizeX/2) / fieldSizeX);
 			int y = (int)((mouseMovedPoint.getY() - deltaY - paddingY + fieldSizeY/2) / fieldSizeY);
@@ -142,5 +161,36 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {}
+	
+	public void changeSelectingPoints(int choice){
+		selectingPoints = choice;
+		GUIlocked = (choice == 0);
+	}
+	
+	public ArrayList<Point> getSelectedPoints(){
+		ArrayList<Point> result = new ArrayList<Point>(selectedPoints);
+		return result;
+	}
+	
+	public int checkOpponentArea(ArrayList<Point> selected){
+		selectingPoints = 1;
+		selectedPoints = selected;
+		this.repaint();
+		JPanel panel = new JPanel();
+		panel.add(new JLabel("This oponent's area is ok?"));
+        int correct = JOptionPane.showConfirmDialog(null, panel, "Area", JOptionPane.YES_NO_OPTION);
+        selectingPoints = 0;
+		selectedPoints = new ArrayList<Point>();
+		this.repaint();
+        return correct;
+	}
+	
+	public void clearSelectedArea() {
+		selectedPoints = new ArrayList<Point>();
+	}
 
+	public void setSelectedPoints(ArrayList<Point> selected) {
+		selectedPoints = selected;
+	}
+	
 }
