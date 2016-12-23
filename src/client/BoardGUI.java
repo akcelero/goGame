@@ -46,6 +46,10 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 		this.color = color;
 	}
 	
+	public void lock(){ GUIlocked = true;}
+	
+	public void unlock(){ GUIlocked = false;}
+	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);

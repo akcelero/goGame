@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Board {
@@ -145,5 +146,10 @@ public class Board {
 			result += eraseGroupOfStones(new Point( x + template[i][0], y + template[i][1]), color);
 		}
 		return result + 1;
+	}
+
+	public ArrayList<Point> getPropositionOfArea(int color) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
