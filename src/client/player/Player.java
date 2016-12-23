@@ -17,4 +17,5 @@ public interface Player {
 	public void getResultOfGame(String result);
 	public void getResultCodeForArea(int code);
 	public void showDialogAboutArea();
+	public String getOpponentNickname();
 }

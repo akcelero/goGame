@@ -223,4 +223,10 @@ public class PlayerHumanGUI implements Player {
         frame.dispose();
 	}
 
+	@Override
+	public String getOpponentNickname() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

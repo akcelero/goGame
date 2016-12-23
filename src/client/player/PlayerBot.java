@@ -83,4 +83,10 @@ public class PlayerBot implements Player {
 		
 	}
 
+	@Override
+	public String getOpponentNickname() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
