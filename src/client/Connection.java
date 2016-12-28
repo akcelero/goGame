@@ -1,10 +1,12 @@
 package client;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.simple.JSONObject;
@@ -32,7 +34,9 @@ public class Connection {
 	}
 
 	public JSONObject receive() {
-		// TODO Auto-generated method stub
+		try {
+			return (JSONObject) in.readObject();
+		} catch (Exception e) {}
 		return null;
 	}
 
@@ -46,12 +50,47 @@ public class Connection {
 		}catch(Exception e){}
 	}
 
-	public void sendMove(int x, int y) {
+	public void sendMove(int x, int y){
+		try{
+			msg = new JSONObject();
+			msg.put("Type", "sendMove");
+			msg.put("x", x);
+			msg.put("y", y);
+			
+			out.writeObject(msg);
+			out.flush();
+			
+			msg.clear();
+		}catch(Exception e){
+			
+		}
+	}
+
+	public void sendNickname(String nickname) {
+		try{
+			msg = new JSONObject();
+			msg.put("Type", "sendNickname");
+			msg.put("nickname", nickname);
+			
+			out.writeObject(msg);
+			out.flush();
+			
+		}catch(Exception e){
+			
+		}
+	}
+
+	public void sendResultOfChecking(int checkOponentArea) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void sendNickname(String nickname) {
+	public void sendArea(ArrayList<Point> countArea) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sendScore(double score) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,9 +1,11 @@
 package server;
 
 import java.awt.Point;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 
@@ -133,6 +135,24 @@ public class Client {
 		}
 		return point;
 	}
+	
+	public ArrayList<Point> countArea() {
+		try {
+			msg = new JSONObject();
+			
+			msg.put("Type", "getArea");
+			
+			out.writeObject(msg);
+			out.flush();
+			
+			msg = (JSONObject) in.readObject();
+			return (ArrayList<Point>)msg.get("area");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public void returnResultCode(int resultCode) {
 		try {
@@ -145,6 +165,21 @@ public class Client {
 			out.flush();
 			
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendResultCodeForArea(int result) {
+		
+		try {
+			msg = new JSONObject();
+			
+			msg.put("Type", "resultCodeForArea");
+			msg.put("result", result);
+			out.writeObject(msg);
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -197,6 +232,37 @@ public class Client {
 			socket.close();
 			
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int checkOpponentArea(ArrayList<Point> countArea) {
+		try {
+			msg = new JSONObject();
+			
+			msg.put("Type", "checkOpponentArea");
+			msg.put("area", countArea);
+			
+			out.writeObject(msg);
+			out.flush();
+			
+			msg = (JSONObject) in.readObject();
+			return (int)msg.get("result");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public void changeToAreaSelecting() {
+		try {
+			msg = new JSONObject();
+			
+			msg.put("Type", "selectingArea");
+			out.writeObject(msg);
+			out.flush();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

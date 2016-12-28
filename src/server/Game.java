@@ -41,6 +41,26 @@ public class Game implements Runnable {
 			}
 			turn ^= 1;
 			players.get(turn).sendOpponentMove(move);
+			if(resultCode == 4200){
+				System.out.println("Started counting points");
+				players.get(1).changeToAreaSelecting();
+				int result;
+				do{
+					ArrayList<Point> area = players.get(0).countArea();
+					result = players.get(1).checkOpponentArea(area);
+					players.get(0).sendResultCodeForArea(result);
+				}while(result == 1);
+				
+				players.get(0).changeToAreaSelecting();
+				do{
+					ArrayList<Point> area = players.get(1).countArea();
+					result = players.get(0).checkOpponentArea(area);
+					players.get(1).sendResultCodeForArea(result);
+				}while(result == 1);
+				if(result == -1){
+					resultCode = 0;
+				}
+			}
 		}
 		if(!players.get(0).isConnected() || players.get(1).getScore() > players.get(0).getScore()){
 			players.get(1).win();
