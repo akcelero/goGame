@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.junit.Before;
@@ -73,6 +74,17 @@ public class BoardTest {
 	}
 	
 	@Test
+	public void testNumberInGroup(){
+		board.commitMove(new Point(1,3), 1);
+		board.commitMove(new Point(1,4), 1);
+		board.commitMove(new Point(1,5), 1);
+		board.commitMove(new Point(1,6), 1);
+		board.commitMove(new Point(1,7), 0);
+		board.commitMove(new Point(1,8), 1);
+		assertEquals(4, board.numberOfStonesInGroup(new Point(1,3), 1, new HashSet<Point>()));
+	}
+	
+	@Test
 	public void testEresingStones(){
 		board.commitMove(new Point(1,2), 1);
 		board.commitMove(new Point(2,3), 1);
@@ -83,6 +95,22 @@ public class BoardTest {
 		board.commitMove(new Point(3,3), 0);
 		board.commitMove(new Point(2,2), 0);
 		assertEquals(0,board.commitMove(new Point(3,2), 0));
+	}
+	
+	@Test
+	public void testPropositionArea(){
+		board.commitMove(new Point(5,5), 0);
+		board.commitMove(new Point(1,2), 1);
+		board.commitMove(new Point(2,3), 1);
+		board.commitMove(new Point(2,1), 1);
+		board.commitMove(new Point(3,1), 1);
+		board.commitMove(new Point(3,3), 1);
+		board.commitMove(new Point(4,2), 1);
+		ArrayList<Point> proposition = board.getPropositionOfArea(1);
+		ArrayList<Point> pattern = new ArrayList<Point>();
+		pattern.add(new Point(2,2));
+		pattern.add(new Point(3,2));
+		assertEquals(pattern, proposition);
 	}
 	
 	/**

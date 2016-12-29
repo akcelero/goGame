@@ -134,6 +134,24 @@ public class Board {
 		}
 		return result;
 	}
+	
+	public int numberOfStonesInGroup(Point point, int color, HashSet<Point> history){
+		System.out.println(point);
+		int x, y, result = 0; 
+		x = point.x;
+		y = point.y;
+		if(history.contains(point) || x < 0 || y < 0 || 19 <= x || 19 <= y
+				|| stones[x][y] == null || stones[x][y].getColor() != color){
+			return 0;
+		}
+		history.add(point);
+		for(int i = 0; i < 4; i++){
+			result += numberOfStonesInGroup(
+					new Point( x + template[i][0], y + template[i][1])
+					, color, history);
+		}
+		return result + 1;
+	}
 	private int eraseGroupOfStones(Point point, int color){
 		int x = (int) point.getX(); 
 		int y = (int) point.getY();
@@ -149,7 +167,36 @@ public class Board {
 	}
 
 	public ArrayList<Point> getPropositionOfArea(int color) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Point> result = new ArrayList<Point>();
+		for(int i=0;i<19;i++){
+			for(int j=0;j<19;j++){
+				if(
+						checkIfCanContactWithColor(i, j, color, new HashSet<Point>()) &&
+						!checkIfCanContactWithColor(i, j, color^1, new HashSet<Point>()) &&
+						stones[i][j] == null){
+					result.add(new Point(i,j));
+				}
+			}
+		}
+		return result;
+	}
+	
+	private boolean checkIfCanContactWithColor(int x, int y, int color, HashSet<Point> visited) {
+		if(x < 0 || y < 0 || 19 <= x || 19 <= y || visited.contains(new Point(x,y))){
+			return false;
+		}
+		visited.add(new Point(x,y));
+		if(stones[x][y] != null){
+			if(stones[x][y].getColor() == color){
+				return true;
+			}
+			return false;
+		}
+		
+		return this.checkIfCanContactWithColor(x+1, y, color, visited) ||
+				this.checkIfCanContactWithColor(x-1, y, color, visited) ||
+				this.checkIfCanContactWithColor(x, y+1, color, visited) ||
+				this.checkIfCanContactWithColor(x, y-1, color, visited);
+		
 	}
 }
