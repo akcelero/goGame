@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import org.json.simple.JSONObject;
 
 public class Client {
-	Socket socket = null;
-	int color;
-	private String opponentNickname;
-	private JSONObject msg;
-	private ObjectOutputStream out;
-	private ObjectInputStream in;
-	private String nickname; 
+	
+	public String nickname = null;
+	int score = 0;
+	Socket socket;
+	ObjectOutputStream out;
+	ObjectInputStream in;
+	JSONObject msg;
+	
 	public Client(Socket socket) {
 		this.socket = socket;
 		msg = new JSONObject();
@@ -30,56 +31,6 @@ public class Client {
 	
 	public boolean isConnected(){
 		return !socket.isClosed();
-	}
-	
-	public double getScore() {
-		try {
-			msg = new JSONObject();
-			
-			msg.put("Type", "getScore");
-			
-			out.writeObject(msg);
-			out.flush();
-			
-			msg = (JSONObject) in.readObject();
-			return (double)msg.get("score");
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return (double)-1.0;
-	}
-	
-	public void setColor(int color){
-		try {
-			msg = new JSONObject();
-			
-			msg.put("Type", "setColor");
-			msg.put("color", color);
-			
-			out.writeObject(msg);
-			out.flush();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public boolean getDecisionAboutBot() {
-		try {
-			msg = new JSONObject();
-			
-			msg.put("Type", "getDecisionAboutBot");
-			
-			out.writeObject(msg);
-			out.flush();
-			
-			msg = (JSONObject) in.readObject();
-			return (boolean)msg.get("decision");
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 	
 	public void establishNickname(){
@@ -102,22 +53,21 @@ public class Client {
 		}
 		return nickname;
 	}
-
-	public void sendNicknameOfOponent(String nicknameOfOpponent) {
+	
+	public void setColor(int color){
 		try {
 			msg = new JSONObject();
 			
-			msg.put("Type", "opponentNickname");
-			msg.put("nickname", nicknameOfOpponent);
+			msg.put("Type", "setColor");
+			msg.put("color", color);
 			
 			out.writeObject(msg);
 			out.flush();
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public Point getMove() {
 		Point point = null;
 		try {
@@ -136,24 +86,6 @@ public class Client {
 		return point;
 	}
 	
-	public ArrayList<Point> countArea() {
-		try {
-			msg = new JSONObject();
-			
-			msg.put("Type", "getArea");
-			
-			out.writeObject(msg);
-			out.flush();
-			
-			msg = (JSONObject) in.readObject();
-			return (ArrayList<Point>)msg.get("area");
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public void returnResultCode(int resultCode) {
 		try {
 			msg = new JSONObject();
@@ -169,21 +101,6 @@ public class Client {
 		}
 	}
 	
-	public void sendResultCodeForArea(int result) {
-		
-		try {
-			msg = new JSONObject();
-			
-			msg.put("Type", "resultCodeForArea");
-			msg.put("result", result);
-			out.writeObject(msg);
-			out.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public void sendOpponentMove(Point move){
 		try {
 			msg = new JSONObject();
@@ -199,8 +116,41 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-
-		public void win() {
+	
+	public void sendNicknameOfOponent(String nicknameOfOpponent) {
+		try {
+			msg = new JSONObject();
+			
+			msg.put("Type", "opponentNickname");
+			msg.put("nickname", nicknameOfOpponent);
+			
+			out.writeObject(msg);
+			out.flush();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public double getScore() {
+		try {
+			msg = new JSONObject();
+			
+			msg.put("Type", "getScore");
+			
+			out.writeObject(msg);
+			out.flush();
+			
+			msg = (JSONObject) in.readObject();
+			return (double)msg.get("score");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (double)-1.0;
+	}
+	
+	public void win() {
 		try {
 			msg = new JSONObject();
 			
@@ -236,6 +186,24 @@ public class Client {
 		}
 	}
 	
+	public ArrayList<Point> countArea() {
+		try {
+			msg = new JSONObject();
+			
+			msg.put("Type", "getArea");
+			
+			out.writeObject(msg);
+			out.flush();
+			
+			msg = (JSONObject) in.readObject();
+			return (ArrayList<Point>)msg.get("area");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public int checkOpponentArea(ArrayList<Point> countArea) {
 		try {
 			msg = new JSONObject();
@@ -253,6 +221,38 @@ public class Client {
 			e.printStackTrace();
 		}
 		return -1;
+	}
+	
+	public boolean getDecisionAboutBot() {
+		try {
+			msg = new JSONObject();
+			
+			msg.put("Type", "getDecisionAboutBot");
+			
+			out.writeObject(msg);
+			out.flush();
+			
+			msg = (JSONObject) in.readObject();
+			return (boolean)msg.get("decision");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public void sendResultCodeForArea(int result) {
+		
+		try {
+			msg = new JSONObject();
+			
+			msg.put("Type", "resultCodeForArea");
+			msg.put("result", result);
+			out.writeObject(msg);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void changeToAreaSelecting() {

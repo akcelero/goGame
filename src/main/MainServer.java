@@ -24,11 +24,12 @@ public class MainServer {
 			while(true){
 								
 				Socket socket = server.accept();
+				System.out.println("New User!");
 				
 				Client player = new Client(socket);
 				boolean playWithPlayer = player.getDecisionAboutBot();
 				
-				if(player.getDecisionAboutBot()){
+				if(playWithPlayer){
 					if(gameWithPlayer != null){
 						if(!gameWithPlayer.getUser(0).isConnected()){
 							gameWithPlayer = null;
@@ -36,9 +37,9 @@ public class MainServer {
 					}
 					if(gameWithPlayer == null){
 						gameWithPlayer = new Game();
-						gameWithPlayer.addPlayer(player);
+						gameWithPlayer.addUser(player);
 					} else {
-						gameWithPlayer.addPlayer(player);
+						gameWithPlayer.addUser(player);
 						new Thread(gameWithPlayer).start();
 						gameWithPlayer = null;
 					}
@@ -48,14 +49,14 @@ public class MainServer {
 					
 					Client bot = new Client(server.accept());
 					
-					gameWithBot.addPlayer(player);
-					gameWithBot.addPlayer(bot);
+					gameWithBot.addUser(player);
+					gameWithBot.addUser(bot);
 					
 					new Thread(gameWithBot).start();
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			System.out.println("Error " + e.getMessage());
 		}
 		try {
 			server.close();
