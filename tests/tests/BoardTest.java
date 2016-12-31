@@ -113,9 +113,6 @@ public class BoardTest {
 		assertEquals(pattern, proposition);
 	}
 	
-	/**
-	 * Test breath counting.
-	 */
 	@Test
 	public void testBreathCounting(){
 		board.commitMove(new Point(2,1), 1);

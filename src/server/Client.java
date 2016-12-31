@@ -203,7 +203,13 @@ public class Client {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Check opponent area.
+	 *
+	 * @param countArea the count area
+	 * @return the int
+	 */
 	public int checkOpponentArea(ArrayList<Point> countArea) {
 		try {
 			msg = new JSONObject();
@@ -240,6 +246,7 @@ public class Client {
 		}
 		return false;
 	}
+
 	
 	public void sendResultCodeForArea(int result) {
 		
@@ -251,6 +258,7 @@ public class Client {
 			out.writeObject(msg);
 			out.flush();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -266,4 +274,5 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+
 }

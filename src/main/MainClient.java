@@ -24,6 +24,7 @@ public class MainClient {
 						new PlayerHumanGUI(),
 						(boot==0)
 				));
+		threadPlayer.start();
 		if(boot == 0){
 			Thread threadBot = new Thread(
 					new ClientEngine(
@@ -34,7 +35,6 @@ public class MainClient {
 					));
 			threadBot.start();
 		}
-		threadPlayer.start();
 		try {
 			threadPlayer.join();
 		} catch (InterruptedException e) {

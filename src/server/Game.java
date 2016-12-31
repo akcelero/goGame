@@ -1,7 +1,6 @@
 package server;
 
 import java.awt.Point;
-import java.net.Socket;
 import java.util.ArrayList;
 
 import main.Board;

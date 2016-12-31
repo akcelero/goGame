@@ -13,12 +13,12 @@ import org.json.simple.JSONObject;
 
 public class Connection {
 
-	private JSONObject msg;
+	Socket socket;
 	ObjectOutputStream out = null;
 	ObjectInputStream in = null;
-	private Socket socket;
-
-	public Connection(String host, int port) {
+	JSONObject msg;
+	
+	public Connection(String host, int port){
 		msg = new JSONObject();
 		try {
 			socket = new Socket(host, port);
@@ -32,24 +32,13 @@ public class Connection {
 			in = new ObjectInputStream(socket.getInputStream());
 		} catch (Exception e) {}
 	}
-
-	public JSONObject receive() {
-		try {
-			return (JSONObject) in.readObject();
-		} catch (Exception e) {}
-		return null;
+	
+	public boolean isConnected(){
+		if(socket == null || socket.isClosed())
+			return false;
+		return socket.isConnected();
 	}
-
-	public void sendDecisionAboutBot(boolean playWithBot) {
-		try{
-			msg = new JSONObject();
-			msg.put("Type", "getDecisionAboutBot");
-			msg.put("decision", playWithBot);
-			out.writeObject(msg);
-			out.flush();
-		}catch(Exception e){}
-	}
-
+	
 	public void sendMove(int x, int y){
 		try{
 			msg = new JSONObject();
@@ -65,7 +54,14 @@ public class Connection {
 			
 		}
 	}
-
+	
+	public JSONObject receive() {
+		try {
+			return (JSONObject) in.readObject();
+		} catch (Exception e) {}
+		return null;
+	}
+	
 	public void sendNickname(String nickname) {
 		try{
 			msg = new JSONObject();
@@ -79,20 +75,55 @@ public class Connection {
 			
 		}
 	}
-
-	public void sendResultOfChecking(int checkOponentArea) {
-		// TODO Auto-generated method stub
+	
+	void sendResultOfChecking(int result) {
+		try{
+			msg = new JSONObject();
+			msg.put("Type", "sendNickname");
+			msg.put("result", result);
+			
+			out.writeObject(msg);
+			out.flush();
+			
+		}catch(Exception e){
+			
+		}		
+	}
+	
+	public void sendArea(ArrayList<Point> area) {
+		try{
+			msg = new JSONObject();
+			msg.put("Type", "sendNickname");
+			msg.put("area", area);
+			System.out.println(msg.get("area"));
+			out.writeObject(msg);
+			out.flush();
+			
+		}catch(Exception e){
+			
+		}
 		
 	}
-
-	public void sendArea(ArrayList<Point> countArea) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	public void sendScore(double score) {
-		// TODO Auto-generated method stub
-		
+		try{
+			msg = new JSONObject();
+			msg.put("Type", "sendScore");
+			msg.put("score", score);
+			out.writeObject(msg);
+			out.flush();
+		}catch(Exception e){
+			
+		}
 	}
 
+	public void sendDecisionAboutBot(boolean playWithBot) {
+		try{
+			msg = new JSONObject();
+			msg.put("Type", "getDecisionAboutBot");
+			msg.put("decision", playWithBot);
+			out.writeObject(msg);
+			out.flush();
+		}catch(Exception e){}
+	}
 }
