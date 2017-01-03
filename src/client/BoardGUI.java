@@ -1,6 +1,7 @@
 package client;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -16,23 +17,25 @@ import main.Board;
 import main.Stone;
 
 public class BoardGUI extends JPanel implements MouseListener, MouseMotionListener{
+
+	private Point mouseClickedPoint;
+	private Point mouseMovedPoint;
+	int width;
+	int height;
+	int deltaX;
+	int deltaY;
+	int fieldSizeX;
+	int fieldSizeY;
 	private int paddingX;
 	private int paddingY;
-	private Point mouseClickedPoint;
-	private ArrayList<Point> selectedPoints;
-	private Integer color;
-	private int fieldSizeX;
-	private int height;
-	private int width;
-	private int deltaY;
-	private int deltaX;
-	private int fieldSizeY;
-	private Point mouseMovedPoint;
 	private Board board;
-	private int selectingPoints;
-	private boolean GUIlocked;
-	private int checkingOponentArea;
-
+	private Integer color = null;
+	ArrayList<Point> selectedPoints = null;
+	int selectingPoints = 0;
+	int checkingOponentArea = 0;
+	private boolean GUIlocked = true;
+	
+	
 	public BoardGUI(){
 		paddingX = 30;
 		paddingY = 30;
@@ -49,6 +52,38 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 	public void lock(){ GUIlocked = true;}
 	
 	public void unlock(){ GUIlocked = false;}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+        System.out.println("mouseClicked " + e.getX() + " " + e.getY());
+        if(GUIlocked == true){
+        	mouseClickedPoint = null;
+        	return;
+        }
+        mouseClickedPoint = new Point(
+        		(e.getX() - (deltaX + paddingX - fieldSizeX/2)) / fieldSizeX,
+        		(e.getY() - (deltaY + paddingY - fieldSizeX/2)) / fieldSizeY
+        	);
+
+    }
+	
+	public Point getClicked(){
+		Point result = mouseClickedPoint;
+		mouseClickedPoint = null;
+		return result;		
+	}
+	
+	public void setBoard(Board board){
+		this.board = board;
+	}
+	
+	
+	@Override
+	public void repaint(){
+		int size = Math.min(this.getHeight(), this.getWidth());
+		this.setSize(size, size);
+		super.repaint();
+	}
 	
 	@Override
 	public void paintComponent(Graphics g){
@@ -103,7 +138,8 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 			int x = (int)((mouseMovedPoint.getX() - deltaX - paddingX + fieldSizeX/2) / fieldSizeX);
 			int y = (int)((mouseMovedPoint.getY() - deltaY - paddingY + fieldSizeY/2) / fieldSizeY);
 			if(0 <= x && x <= 18 && 0 <= y && y <= 18 && color != null
-					&& 0 != board.checkTurn(new Point(x, y), color)){
+					&& 0 != board.checkTurn(new Point(x, y), color)
+					&& (selectingPoints == 0 || !selectedPoints.contains(new Point(x,y)))){
 				g.fillOval(
 						paddingY + deltaX + x * width/18 - (fieldSizeX * 3)/10,
 						paddingY + deltaY + y * height/18 - (fieldSizeY * 3)/10,
@@ -114,7 +150,7 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 		}
 		for(int i = 0; i < 19; i++){
 			for(int j = 0; j < 19; j++){
-				Stone stone = board.getStone(new Point(i,j));
+				Stone stone = board.getStone(i,j);
 				if(stone == null){
 					continue;
 				}
@@ -133,38 +169,51 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 			}
 		}
 	}
-	public Point getClicked(){
-		Point result = mouseClickedPoint;
-		mouseClickedPoint = null;
-		return result;		
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if(selectingPoints == 1){
+			int x = (int)((e.getX() - deltaX - paddingX + fieldSizeX/2) / fieldSizeX);
+			int y = (int)((e.getY() - deltaY - paddingY + fieldSizeY/2) / fieldSizeY);
+			if(0 <= x && x <= 18 && 0 <= y && y <= 18 && board.getStone(x, y) == null){
+				if(selectedPoints.contains(new Point(x,y))){
+					selectedPoints.remove(new Point(x,y));
+				} else {
+					selectedPoints.add(new Point(x, y));
+				}
+			}
+		}
+		this.repaint();
 	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		mouseClickedPoint = new Point(
-        		(e.getX() - (deltaX + paddingX - fieldSizeX/2)) / fieldSizeX,
-        		(e.getY() - (deltaY + paddingY - fieldSizeX/2)) / fieldSizeY
-        	);
-
-	}
-
+	
 	@Override
 	public void mouseEntered(MouseEvent arg0) {}
-
+	
 	@Override
 	public void mouseExited(MouseEvent arg0) {}
-
-	@Override
-	public void mousePressed(MouseEvent e) {}
-
+	
 	@Override
 	public void mouseReleased(MouseEvent arg0) {}
+	
+	@Override
+	public void mouseDragged(MouseEvent arg0) {}
+	
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		if(GUIlocked == true){
+			mouseMovedPoint = null;
+		}
+		mouseMovedPoint = new Point(arg0.getX(), arg0.getY());
+		this.repaint();
+	}
+	
+	@Override
+    public Dimension getPreferredSize() {
+        Dimension d = this.getParent().getSize();
+        int newSize = d.width > d.height ? d.height : d.width;
+        newSize = newSize == 0 ? 100 : newSize;
+        return new Dimension(newSize, newSize);
+    }
 	
 	public void changeSelectingPoints(int choice){
 		selectingPoints = choice;
@@ -183,6 +232,13 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 		JPanel panel = new JPanel();
 		panel.add(new JLabel("This oponent's area is ok?"));
         int correct = JOptionPane.showConfirmDialog(null, panel, "Area", JOptionPane.YES_NO_OPTION);
+        if(correct == 1){
+        	panel = new JPanel();
+        	panel.add(new JLabel("Want continue game?"));
+        	if( 0 == JOptionPane.showConfirmDialog(null, panel, "Back to game", JOptionPane.YES_NO_OPTION)){
+        		correct = -1;
+        	}
+        }
         selectingPoints = 0;
 		selectedPoints = new ArrayList<Point>();
 		this.repaint();
@@ -196,5 +252,5 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 	public void setSelectedPoints(ArrayList<Point> selected) {
 		selectedPoints = selected;
 	}
-	
+
 }
