@@ -1,5 +1,4 @@
 package main;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -8,8 +7,18 @@ import client.ClientEngine;
 import client.player.PlayerBot;
 import client.player.PlayerHumanGUI;
 
+/**
+ * The Class MainClient.
+ */
 public class MainClient {
 	
+	/**
+	 * The main method.
+	 * Start new thread for game.
+	 * Check if want play with bot.
+	 * If yes, start new thread for bot.
+	 * @param args the arguments
+	 */
 	public static void main(String [ ] args){
 		
 		
@@ -42,5 +51,4 @@ public class MainClient {
 			e.printStackTrace();
 		}
 	}
-
 }

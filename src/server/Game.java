@@ -5,20 +5,39 @@ import java.util.ArrayList;
 
 import main.Board;
 
+/**
+ * The Class Game.
+ */
 public class Game implements Runnable {
 	
+	/** ArrayList of players. */
 	ArrayList<Client> players = null;
+	
+	/** Logic. */
 	Board board = null;
 	
+	/**
+	 * Instantiates a new game.
+	 */
 	public Game(){
 		players = new ArrayList<Client>();
 		board = new Board();
 	}
-
+	
+	/**
+	 * Check if game is waiting.
+	 *
+	 * @return true if game is waiting
+	 */
 	public Boolean waiting(){
 		return players.size() < 2;
 	}
-
+	
+	/**
+	 * Adding the user.
+	 *
+	 * @param player
+	 */
 	public void addUser(Client player){
 		players.add(player);
 	}
@@ -27,6 +46,9 @@ public class Game implements Runnable {
 		return players.get(number);
 	}
 
+	/**
+	 * Game step by step.
+	 */
 	@Override
 	public void run() {
 		System.out.println("Starting new game");

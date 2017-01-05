@@ -9,15 +9,34 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 
+/**
+ * The Class Client.
+ */
 public class Client {
 	
+	/** Nickname of player. */
 	public String nickname = null;
+	
+	/** Score. */
 	int score = 0;
+	
+	/** Socket for communication with client. */
 	Socket socket;
+	
+	/** The output stream to client. */
 	ObjectOutputStream out;
+	
+	/** The input stream from client. */
 	ObjectInputStream in;
+	
+	/** The message to / from client. */
 	JSONObject msg;
 	
+	/**
+	 * Instantiates a new client.
+	 *
+	 * @param socket connected with player.
+	 */
 	public Client(Socket socket) {
 		this.socket = socket;
 		msg = new JSONObject();
@@ -29,10 +48,18 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * Checks if is connected.
+	 *
+	 * @return true, if is connected
+	 */
 	public boolean isConnected(){
 		return !socket.isClosed();
 	}
 	
+	/**
+	 * Establish nickname of player.
+	 */
 	public void establishNickname(){
 		try {
 			msg = new JSONObject();
@@ -47,6 +74,11 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * Gets the nickname.
+	 *
+	 * @return the nickname
+	 */
 	public String getNickname(){
 		if(nickname == null){
 			establishNickname();
@@ -54,6 +86,11 @@ public class Client {
 		return nickname;
 	}
 	
+	/**
+	 * Sets the color.
+	 *
+	 * @param color the new color
+	 */
 	public void setColor(int color){
 		try {
 			msg = new JSONObject();
@@ -67,7 +104,12 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Gets the move.
+	 *
+	 * @return the move
+	 */
 	public Point getMove() {
 		Point point = null;
 		try {
@@ -85,7 +127,12 @@ public class Client {
 		}
 		return point;
 	}
-	
+
+	/**
+	 * Return result code (when ask about area of opponent).
+	 *
+	 * @param resultCode the result code
+	 */
 	public void returnResultCode(int resultCode) {
 		try {
 			msg = new JSONObject();
@@ -101,6 +148,11 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * Send opponent move.
+	 *
+	 * @param move the move
+	 */
 	public void sendOpponentMove(Point move){
 		try {
 			msg = new JSONObject();
@@ -116,7 +168,12 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Send nickname of oponent.
+	 *
+	 * @param nicknameOfOponent the nickname of opponent
+	 */
 	public void sendNicknameOfOponent(String nicknameOfOpponent) {
 		try {
 			msg = new JSONObject();
@@ -131,7 +188,12 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Gets the score counted by user.
+	 *
+	 * @return the score
+	 */
 	public double getScore() {
 		try {
 			msg = new JSONObject();
@@ -149,7 +211,10 @@ public class Client {
 		}
 		return (double)-1.0;
 	}
-	
+
+	/**
+	 * Send info about win.
+	 */
 	public void win() {
 		try {
 			msg = new JSONObject();
@@ -168,6 +233,9 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * send info about lose.
+	 */
 	public void lose() {
 		try {
 			msg = new JSONObject();
@@ -186,6 +254,11 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * Ask about arrea of player.
+	 *
+	 * @return the array list
+	 */
 	public ArrayList<Point> countArea() {
 		try {
 			msg = new JSONObject();
@@ -228,7 +301,12 @@ public class Client {
 		}
 		return -1;
 	}
-	
+
+	/**
+	 * Gets the decision about bot.
+	 *
+	 * @return the decision about bot
+	 */
 	public boolean getDecisionAboutBot() {
 		try {
 			msg = new JSONObject();
@@ -247,7 +325,11 @@ public class Client {
 		return false;
 	}
 
-	
+	/**
+	 * Send result code for area of oponent.
+	 *
+	 * @param result code for result
+	 */
 	public void sendResultCodeForArea(int result) {
 		
 		try {
@@ -262,7 +344,10 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Change GUI to area selecting.
+	 */
 	public void changeToAreaSelecting() {
 		try {
 			msg = new JSONObject();
@@ -274,5 +359,5 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-
+	
 }

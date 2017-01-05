@@ -7,17 +7,32 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.json.simple.JSONObject;
 
+/**
+ * The Class Connection.
+ */
 public class Connection {
-
+	
+	/** The socket. */
 	Socket socket;
+	
+	/** The output stream. */
 	ObjectOutputStream out = null;
+	
+	/** The input stream. */
 	ObjectInputStream in = null;
+	
+	/** The message to / from server. */
 	JSONObject msg;
 	
+	/**
+	 * Instantiates a new connection.
+	 *
+	 * @param host the host
+	 * @param port the port
+	 */
 	public Connection(String host, int port){
 		msg = new JSONObject();
 		try {
@@ -39,6 +54,12 @@ public class Connection {
 		return socket.isConnected();
 	}
 	
+	/**
+	 * Send move.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public void sendMove(int x, int y){
 		try{
 			msg = new JSONObject();
@@ -54,14 +75,24 @@ public class Connection {
 			
 		}
 	}
-	
+
+	/**
+	 * Receive.
+	 *
+	 * @return the JSON object
+	 */
 	public JSONObject receive() {
 		try {
 			return (JSONObject) in.readObject();
 		} catch (Exception e) {}
 		return null;
 	}
-	
+
+	/**
+	 * Send nickname.
+	 *
+	 * @param nickname the nickname
+	 */
 	public void sendNickname(String nickname) {
 		try{
 			msg = new JSONObject();
@@ -75,7 +106,12 @@ public class Connection {
 			
 		}
 	}
-	
+
+	/**
+	 * Send result of checking.
+	 *
+	 * @param result the result
+	 */
 	void sendResultOfChecking(int result) {
 		try{
 			msg = new JSONObject();
@@ -89,7 +125,12 @@ public class Connection {
 			
 		}		
 	}
-	
+
+	/**
+	 * Send area.
+	 *
+	 * @param area the area
+	 */
 	public void sendArea(ArrayList<Point> area) {
 		try{
 			msg = new JSONObject();
@@ -104,7 +145,12 @@ public class Connection {
 		}
 		
 	}
-	
+
+	/**
+	 * Send score.
+	 *
+	 * @param score the score
+	 */
 	public void sendScore(double score) {
 		try{
 			msg = new JSONObject();
@@ -117,6 +163,11 @@ public class Connection {
 		}
 	}
 
+	/**
+	 * Send decision about bot.
+	 *
+	 * @param true if player wants play with bot
+	 */
 	public void sendDecisionAboutBot(boolean playWithBot) {
 		try{
 			msg = new JSONObject();

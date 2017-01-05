@@ -1,5 +1,6 @@
 package main;
 
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,8 +8,21 @@ import java.net.Socket;
 import server.Client;
 import server.Game;
 
+/**
+ * The Class MainServer.
+ */
 public class MainServer {
-	
+
+	/**
+	 * The main method.
+	 * Inside Server has instance of game for player with bot and without.
+	 * If somebody wants play with bot, then he is inserting into gameWithBot and server insert next player(bot) in same game.
+	 * Then game is starting new thread and variable gameWithBot gets new instance
+	 * If somebody wants play with other player he is inserting into gameWithoutBot, if this game is not waiting any more,
+	 * then game is starting new thread and variable gameWithoutBot gets new instance 
+	 *
+	 * @param args the arguments - doesn't matter
+	 */
 	public static void main(String [ ] args){
 		Game gameWithBot = null;
 		Game gameWithPlayer = null;

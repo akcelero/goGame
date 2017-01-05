@@ -16,26 +16,61 @@ import javax.swing.JPanel;
 import main.Board;
 import main.Stone;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class BoardGUI.
+ */
 public class BoardGUI extends JPanel implements MouseListener, MouseMotionListener{
-
+	
 	private Point mouseClickedPoint;
 	private Point mouseMovedPoint;
+	
+	/** The width. */
 	int width;
+	
+	/** The height. */
 	int height;
+	
+	/** The delta X. */
 	int deltaX;
+	
+	/** The delta Y. */
 	int deltaY;
+	
+	/** The field size X. */
 	int fieldSizeX;
+	
+	/** The field size Y. */
 	int fieldSizeY;
+	
+	/** The padding X. */
 	private int paddingX;
+	
+	/** The padding Y. */
 	private int paddingY;
+	
+	/** Logic for game. */
 	private Board board;
+	
+	/** Color of player. */
 	private Integer color = null;
+	
+	/** Selected area. */
 	ArrayList<Point> selectedPoints = null;
+	
+	/** The selecting points. */
 	int selectingPoints = 0;
+	
+	/** The checking oponent area. */
 	int checkingOponentArea = 0;
+	
+	/** True if GUI is locked. */
 	private boolean GUIlocked = true;
 	
 	
+	/**
+	 * Instantiates a new board GUI.
+	 */
 	public BoardGUI(){
 		paddingX = 30;
 		paddingY = 30;
@@ -45,14 +80,28 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 		selectedPoints = new ArrayList<Point>();
 	}
 	
+	/**
+	 * Sets color.
+	 *
+	 * @param color the new color
+	 */
 	public void setColor(int color){
 		this.color = color;
 	}
 	
+	/**
+	 * Locking GUI.
+	 */
 	public void lock(){ GUIlocked = true;}
 	
+	/**
+	 * Unlocking GUI.
+	 */
 	public void unlock(){ GUIlocked = false;}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
         System.out.println("mouseClicked " + e.getX() + " " + e.getY());
@@ -67,16 +116,30 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 
     }
 	
+	/**
+	 * Gets the clicked.
+	 *
+	 * @return the clicked
+	 */
 	public Point getClicked(){
 		Point result = mouseClickedPoint;
 		mouseClickedPoint = null;
 		return result;		
 	}
-	
+
+	/**
+	 * Sets the board.
+	 *
+	 * @param board the new board
+	 */
 	public void setBoard(Board board){
 		this.board = board;
 	}
 	
+	
+	/**
+	 * Painting every line and every circle.
+	 */
 	
 	@Override
 	public void repaint(){
@@ -170,6 +233,9 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if(selectingPoints == 1){
@@ -186,18 +252,33 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 		this.repaint();
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
+	 */
 	@Override
 	public void mouseEntered(MouseEvent arg0) {}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
+	 */
 	@Override
 	public void mouseExited(MouseEvent arg0) {}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+	 */
 	@Override
 	public void mouseReleased(MouseEvent arg0) {}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
+	 */
 	@Override
 	public void mouseDragged(MouseEvent arg0) {}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
+	 */
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		if(GUIlocked == true){
@@ -209,22 +290,41 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 	
 	@Override
     public Dimension getPreferredSize() {
+        // Relies on being the only component
+        // in a layout that will center it without
+        // expanding it to fill all the space.
         Dimension d = this.getParent().getSize();
         int newSize = d.width > d.height ? d.height : d.width;
         newSize = newSize == 0 ? 100 : newSize;
         return new Dimension(newSize, newSize);
     }
 	
+	/**
+	 * Change to mode "selecting points".
+	 *
+	 * @param choice the choice
+	 */
 	public void changeSelectingPoints(int choice){
 		selectingPoints = choice;
 		GUIlocked = (choice == 0);
 	}
-	
+
+	/**
+	 * Gets the selected area.
+	 *
+	 * @return the selected points
+	 */
 	public ArrayList<Point> getSelectedPoints(){
 		ArrayList<Point> result = new ArrayList<Point>(selectedPoints);
 		return result;
 	}
 	
+	/**
+	 * Check opponent area. 
+	 *
+	 * @param selected the selected
+	 * @return int - decide about area, 0 - OK, 1 - DISAGREE, -1 - BACK TO GAME
+	 */
 	public int checkOpponentArea(ArrayList<Point> selected){
 		selectingPoints = 1;
 		selectedPoints = selected;
@@ -244,7 +344,10 @@ public class BoardGUI extends JPanel implements MouseListener, MouseMotionListen
 		this.repaint();
         return correct;
 	}
-	
+
+	/**
+	 * Clear selected area.
+	 */
 	public void clearSelectedArea() {
 		selectedPoints = new ArrayList<Point>();
 	}

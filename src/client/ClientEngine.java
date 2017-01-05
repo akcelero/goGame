@@ -13,12 +13,29 @@ import client.player.Player;
  */
 public class ClientEngine implements Runnable {
 	
+	/** The host. */
 	String host;
+	
+	/** The port. */
 	int port;
+	
+	/** The client. */
 	Player client;
+	
+	/** The play with bot. */
 	private boolean playWithBot;
+	
+	/** The con. */
 	Connection con;
 	
+	/**
+	 * Instantiates a new client engine.
+	 *
+	 * @param host the host
+	 * @param port the port
+	 * @param client the client
+	 * @param playWithBot the play with bot
+	 */
 	public ClientEngine(String host, int port, Player client, boolean playWithBot){
 		this.host = host;
 		this.port = port;
@@ -26,6 +43,9 @@ public class ClientEngine implements Runnable {
 		this.playWithBot = playWithBot; 
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 		JSONObject data = new JSONObject();
@@ -34,6 +54,9 @@ public class ClientEngine implements Runnable {
 		try{
 			while(data != null){
 				data = con.receive();
+				if(!con.isConnected() || data == null){
+					break;
+				}
 				switch((String)data.get("Type")){
 					case "getDecisionAboutBot":
 						con.sendDecisionAboutBot(playWithBot);
@@ -44,6 +67,7 @@ public class ClientEngine implements Runnable {
 					case "getTurn":
 						Point move = client.getMove();
 						con.sendMove(move.x, move.y);
+						System.out.println("Sended: X:" + move.x + " Y:" + move.y);
 					break;
 					case "getNickname":
 						con.sendNickname(client.getNickname());
@@ -61,11 +85,10 @@ public class ClientEngine implements Runnable {
 						client.getResultOfGame((String) data.get("status"));
 						return;
 //					break;
-					default:
-						System.out.println("Recived undefined package! " + (String)data.get("Type"));
-					break;
 					case "checkOpponentArea":
-						con.sendResultOfChecking(client.checkOponentArea((ArrayList<Point>) data.get("area")));
+						con.sendResultOfChecking(
+								client.checkOponentArea((ArrayList<Point>) data.get("area"))
+							);
 					break;
 					case "getArea":
 						con.sendArea(client.countArea());
@@ -78,6 +101,9 @@ public class ClientEngine implements Runnable {
 					break;
 					case "selectingArea":
 						client.showDialogAboutArea();
+					break;
+					default:
+						System.out.println("Recived undefined package! " + (String)data.get("Type"));
 					break;
 				}
 			}

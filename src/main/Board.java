@@ -4,15 +4,29 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * The Class Board.
+ */
 public class Board {
 	
-	
+	/** The width. */
 	int width = 19;
+	
+	/** The height. */
 	int height = 19;
+	
+	/** The last move. */
 	Point lastMove = null;
+	
+	/** The stones. */
 	private Stone[][][] stones;
+	
+	/** The template. */
 	int[][] template = new int[][]{{0,1},{0,-1},{1,0},{-1,0}};
 	
+	/**
+	 * Instantiates a new board.
+	 */
 	public Board(){
 		stones = new Stone[2][19][19];
 		for(int i = 0; i < 19; i++){
@@ -23,6 +37,13 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Gets the stone.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @return the stone
+	 */
 	public Stone getStone(int x, int y){
 		if(
 				18 < x || x < 0 ||
@@ -32,6 +53,12 @@ public class Board {
 		return stones[0][x][y];
 	}
 	
+	/**
+	 * Gets the stone.
+	 *
+	 * @param point the point
+	 * @return the stone
+	 */
 	public Stone getStone(Point point){
 		if(
 				width - 1 < (int)point.getX() || (int)point.getX() < 0 ||
@@ -41,6 +68,13 @@ public class Board {
 		return stones[0][(int)point.getX()][(int)point.getY()];
 	}
 	
+	/**
+	 * Commit move.
+	 *
+	 * @param point the point
+	 * @param color the color
+	 * @return score for move
+	 */
 	public int commitMove(Point point, int color) {
 		// check if pass
 		if(point.equals(new Point(-1, -1))){
@@ -76,6 +110,13 @@ public class Board {
 		return putStone(point, color);
 	}
 	
+	/**
+	 * Check if is KO move.
+	 *
+	 * @param point the point
+	 * @param color the color
+	 * @return 1 if yes, other way 0
+	 */
 	private int checkKO(Point point, int color) {
 		Stone backup[][] = new Stone[19][19];
 		for(int i=0;i<19;i++){
@@ -111,6 +152,13 @@ public class Board {
 		return same?1:0;
 	}
 
+	/**
+	 * Check if turn is correct.
+	 *
+	 * @param point the point
+	 * @param color the color
+	 * @return 1 if is correct, 0 other way
+	 */
 	public int checkTurn(Point point, int color){
 		if(checkKO(point, color) != 0){
 			return 0;
@@ -119,6 +167,13 @@ public class Board {
 		return Math.max(result.x, result.y);
 	}
 	
+	/**
+	 * Same as checkTurn, but more info about result.
+	 *
+	 * @param point the point
+	 * @param color the color
+	 * @return Point(nrOfOpponentBreath, nrOfPlayerBreath)
+	 */
 	public Point checkTurnPoint(Point point, int color) {
 		Point newPoint;
 		int x, y;
@@ -148,6 +203,14 @@ public class Board {
 		return new Point(nrOfOpponentBreath, nrOfPlayerBreath);
 	}
 	
+	/**
+	 * Number of breath for position Point(x,y) with color.
+	 *
+	 * @param point the point
+	 * @param color the color
+	 * @param history the history
+	 * @return number of breath
+	 */
 	public int numberOfBreath(Point point, int color, HashSet<Point> history){
 		int x, y, result = 0;
 		x = (int) point.getX();
@@ -168,7 +231,14 @@ public class Board {
 		}
 		return result;
 	}
-	
+	/**
+	 * Number of stones in group.
+	 *
+	 * @param point the point
+	 * @param color the color
+	 * @param history the history
+	 * @return number of stones in group.
+	 */
 	public int numberOfStonesInGroup(Point point, int color, HashSet<Point> history){
 		System.out.println(point);
 		int x, y, result = 0; 
@@ -188,6 +258,13 @@ public class Board {
 	}
 	
 
+	/**
+	 * Putting stone and erasing opponent's stones.
+	 *
+	 * @param point the point
+	 * @param color the color
+	 * @return score for putting stone.
+	 */
 	private int putStone(Point point, int color) {
 		stones[0][(int)point.getX()][(int)point.getY()] = new Stone(color);
 		Point newPoint;
@@ -207,6 +284,14 @@ public class Board {
 		return result;
 	}
 	
+	/**
+	 * Erase group of stones.
+	 *
+	 * @param point the point
+	 * @param color the color
+	 * @param history the history
+	 * @return number of erased stones.
+	 */
 	private int eraseGroupOfStones(Point point, int color){
 		int x = (int) point.getX(); 
 		int y = (int) point.getY();
@@ -222,6 +307,12 @@ public class Board {
 	}
 	
 
+	/**
+	 * Gets the proposition of area.
+	 *
+	 * @param color the color
+	 * @return points belong to proposed area
+	 */
 	public ArrayList<Point> getPropositionOfArea(int color) {
 		ArrayList<Point> result = new ArrayList<Point>();
 		for(int i=0;i<19;i++){
@@ -256,3 +347,13 @@ public class Board {
 		
 	}
 }
+
+
+
+
+
+
+
+
+
+
