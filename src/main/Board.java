@@ -278,7 +278,7 @@ public class Board {
 			if((0 <= x && x < 19 && 0 <= y && y < 19)
 					&& stones[0][x][y] != null && stones[0][x][y].getColor() == (color ^ 1)
 					&& numberOfBreath(newPoint, color ^ 1, new HashSet<Point>()) == 0){
-				result += eraseGroupOfStones(newPoint, color ^ 1);
+				result += eraseGroupOfStones(newPoint, color ^ 1, new HashSet<Point>());
 			}
 		}
 		return result;
@@ -292,17 +292,21 @@ public class Board {
 	 * @param history the history
 	 * @return number of erased stones.
 	 */
-	private int eraseGroupOfStones(Point point, int color){
-		int x = (int) point.getX(); 
+	private int eraseGroupOfStones(Point point, int color, HashSet<Point> history){
+		int x = (int) point.getX();
 		int y = (int) point.getY();
 		int result = 0;
-		if(x < 0 || y < 0 || 19 <= x || 19 <= y || (stones[0][x][y] != null && stones[0][x][y].getColor()!=color)){
+		if(history.contains(point) || !(0 <= x && x <= 18 && 0 <= y && y <= 18)){
 			return 0;
 		}
-		stones[0][x][y] = null;
-		for(int i = 0; i < 4; i++){
-			result += eraseGroupOfStones(new Point( x + template[i][0], y + template[i][1]), color);
+		history.add(point);
+		if(stones[0][x][y] == null || stones[0][x][y].getColor() != color){
+			return 0;
 		}
+		for(int i = 0; i < 4; i++){
+			result += eraseGroupOfStones(new Point( x + template[i][0], y + template[i][1]), color, history);
+		}
+		stones[0][x][y] = null;
 		return result + 1;
 	}
 	
